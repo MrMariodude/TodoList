@@ -9,16 +9,31 @@ let iconSun = `<svg   class ="Mode-Change" xmlns="http://www.w3.org/2000/svg" wi
 /* main start */
 let inputTask = document.querySelector(".input");
 let tasks  = document.querySelector(".tasks");
+let nodes = 0;
+let temp = [];
+let AllBtn = document.querySelector(".all-btn");
+let ActiveBtn = document.querySelector(".active-btn");
+let CompletedBtn = document.querySelector(".completed-btn");
+let clearCompleted = document.querySelector("#clear-all");
 /* main end */
 
+AllBtn.classList.add("clicked");
 
+/* Retrive Data From Local Storage start */
 
+if(localStorage.getItem("tasks")){
+    
+    JSON.parse(localStorage.getItem("tasks")).forEach((ele)=>{
+        addNewElement(ele[0],1,ele[2],ele[1]);
+    });
 
+}
 
+/* Retrive Data From Local Storage end */
 
 /*Define Section end*/
 /* Function Section start*/
-function addNewElement(inputTask_text) {
+function addNewElement(inputTask_text,flag,ser,btnStatus) {
     //define section
     let createdDiv = document.createElement("div");
     let button = document.createElement("button");
@@ -27,6 +42,11 @@ function addNewElement(inputTask_text) {
     button.innerHTML = iconCheck;
     //set attribute
     createdDiv.setAttribute('class', 'created-task');
+    if(flag === 0){
+        createdDiv.setAttribute("serial",Date.now());
+    }else{
+        createdDiv.setAttribute("serial",ser);
+    }
     button.setAttribute('class', 'task-button');
     text.setAttribute('class', 'task-text');
     //set attribute
@@ -40,18 +60,47 @@ function addNewElement(inputTask_text) {
     tasks.prepend(createdDiv);
     let deleteMark = document.querySelector(".cross-mark");
 
+    let itemsNodes = document.querySelector("#items-left");
+    itemsNodes.textContent = `${++nodes} items left`;
     deleteMark.addEventListener("click",()=>{
         deleteMark.parentElement.remove();
+        itemsNodes.textContent = `${--nodes} items left`;
+
+        /* Store Data in LocalStorage start */
+        let serial = (deleteMark.parentElement).getAttribute("serial");
+        temp =JSON.parse(localStorage.getItem("tasks"));
+        temp = temp.filter((ele)=>ele[2] != serial);
+        localStorage.setItem("tasks",JSON.stringify(temp));
+        /* Store Data in LocalStorage start */
     });
 
     let checkMark = document.querySelector(".task-button");
-    checkMark.addEventListener("click", ()=>{ 
-        console.log(checkMark.nextElementSibling.classList.contains("text-decorate"));
+    if(btnStatus === "Completed"){
+        checkMark.nextElementSibling.classList.add("text-decorate");
+        checkMark.classList.add("task-button-color");
+    }
+    checkMark.addEventListener("click", () => { 
         checkMark.nextElementSibling.classList.toggle("text-decorate");
         checkMark.classList.toggle("task-button-color");
-    });    
-
+        let serial = (checkMark.parentElement).getAttribute("serial");
+        temp =JSON.parse(localStorage.getItem("tasks"));
+        temp = temp.map((ele)=>{
+        if(ele[2] == serial && ele[1] == "Active"){
+            ele[1] = "Completed";
+        }
+        else if(ele[2] == serial && ele[1] == "Completed")
+        {
+            ele[1] = "Active";
+        }
+        return ele;
+        });
+        localStorage.setItem("tasks",JSON.stringify(temp));
+        /* Store Data in LocalStorage start */
+    });
+        temp.push([inputTask_text,btnStatus,createdDiv.getAttribute("serial")]);
+        localStorage.setItem("tasks",JSON.stringify(temp));
 }
+
 
 
 
@@ -75,15 +124,68 @@ function addNewElement(inputTask_text) {
 
 /* Events Section start */
 inputTask.addEventListener("keydown", (event)=>{
-    if (event.key === "Enter") {
-            addNewElement(inputTask.value);
+    if (event.key === "Enter" && /\w/i.test(inputTask.value)) {
+            if((/\w{16,}/i.test(inputTask.value))){
+                window.alert("Cannot Enter text more than 15 character");
+            }else{
+                addNewElement(inputTask.value,0,null, "Active");
+            }
             inputTask.value = null;
     }
-    else if(event.key === "Enter"){
-        //! handle the width
-        console.log("Error");
-    }
+    
     }
     );
+    AllBtn.addEventListener("click",function AllFun(){
+        
+        let tasks = document.querySelectorAll(".created-task");
+        tasks.forEach((ele)=>{
+            ele.style.display = "flex";
+        });
+
+        AllBtn.classList.add("clicked");
+        ActiveBtn.classList.remove("clicked");
+        CompletedBtn.classList.remove("clicked");
+        inputTask.value = null;
+        inputTask.setAttribute("placeholder","Create a new todo...");
+        inputTask.removeAttribute("disabled");
+    });
+    ActiveBtn.addEventListener("click",function ActiveFun(){
+        let tasks = document.querySelectorAll(".created-task");
+        tasks.forEach((ele)=>{
+            ele.firstElementChild.classList.contains("task-button-color") ? ele.style.display = "none" : ele.style.display = "flex" ; 
+        });
+        AllBtn.classList.remove("clicked");
+        ActiveBtn.classList.add("clicked");
+        CompletedBtn.classList.remove("clicked");
+        inputTask.value = "Go to All section To Add Tasks";
+        inputTask.setAttribute("disabled","disabled");
+    });
+    CompletedBtn.addEventListener("click",function CompleteFun(){
+        let tasks = document.querySelectorAll(".created-task");
+        tasks.forEach((ele)=>{
+            ele.firstElementChild.classList.contains("task-button-color") ? ele.style.display = "flex" : ele.style.display = "none" ; 
+        });
+        AllBtn.classList.remove("clicked");
+        ActiveBtn.classList.remove("clicked");
+        CompletedBtn.classList.add("clicked");
+        inputTask.value = "Go to All section To Add Tasks";
+        inputTask.setAttribute("disabled","disabled");
+    });
+    clearCompleted.addEventListener("click",()=>{
+        let itemsNodes = document.querySelector("#items-left");
+        let tasks = document.querySelectorAll(".created-task");
+        temp = JSON.parse(localStorage.getItem("tasks"));
+        tasks.forEach((ele)=>{
+            ele.firstElementChild.classList.contains("task-button-color") ? ele.remove() : 0;
+        });
+        temp = temp.filter((ele)=>{
+        if(ele[1] == "Completed"){
+            itemsNodes.textContent = `${--nodes} items left`;
+            return false;
+        }
+        return true;
+    });
+        localStorage.setItem("tasks",JSON.stringify(temp));
+    });
 /* Events Section end */
 

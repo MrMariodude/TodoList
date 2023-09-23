@@ -226,7 +226,23 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+.clicked {
+    background: -webkit-linear-gradient(360deg,rgba(168,108,240,1) 0%,rgba(31,39,104,1) 68%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 /* Footer Section End */
+/* DarkMode Section start*/
+.container{
+    
+}
+
+
+
+
+
+/* DarkMode Section end*/
+/*Events section start*/
 @media (max-width: 700px) {
     .WrapperAll{
         width:100%;
@@ -252,3 +268,4 @@ body {
         font-size: 14px !important;
     }
 }
+/*Events section end*/
