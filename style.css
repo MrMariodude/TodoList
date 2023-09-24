@@ -27,7 +27,11 @@ body {
     background-size:contain ; /* This ensures the image covers the entire element */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-attachment: fixed; /* Keeps the image fixed as you scroll */
-    background-color: #f6f6f8;
+    background-color: var(--VeryLightGray);
+    /*background-color: var(--VeryDarkBlue);/* Dark Mode */
+}
+.body-dark{
+    background-color: var(--VeryDarkBlue);
 }
 
 /* Header Section Start */
@@ -38,6 +42,27 @@ body {
     width:85%;
     height:20vh;
 }
+.mode-change{
+    background-color: transparent;
+    border: none !important;
+    outline:none!important;
+    cursor: pointer;
+    display:flex;
+    justify-content: flex-end;
+}
+
+
+.svg-icon {
+    transition: opacity 0.3s ease;
+}
+
+/* Define a class to hide the icon */
+.svg-icon.hidden {
+    opacity: 0;
+}
+
+
+
 .TODO {
     letter-spacing:20px;
     font-size:40px;
@@ -85,8 +110,12 @@ body {
     width:100%;
     height:50px;
     background-color: var(--VeryLightGrayishBlue);
+    /*background-color: var(--VeryDarkGrayishBlue);/* Dark Mode */
     border-radius: 5px;
 
+}
+.input-task-dark{
+    background-color: var(--VeryDarkGrayishBlue);
 }
 .check-mark{
     border-radius: 100%;
@@ -105,6 +134,7 @@ body {
     width : 75%;
     font-size: 13px;
     background-color: var(--VeryLightGrayishBlue) ;
+    /*background-color: var(--VeryDarkGrayishBlue) ; /* Dark Mode */
     margin-left: 20px;
 }
 .tasks{
@@ -126,6 +156,7 @@ body {
     width: 100%;
     height: 50px;
     background-color: var(--VeryLightGrayishBlue);
+    /*background-color: var(--VeryDarkGrayishBlue);/* Dark Mode */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -139,7 +170,8 @@ body {
     min-height:50px ;
     line-height: 25px;
     flex-shrink: 0;
-    background-color:#ffffff;
+    background-color: var(--VeryLightGrayishBlue) ;
+    /*background-color: #25273C ; /*Dark Mode */
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-image: linear-gradient(360deg,rgba(168,108,240,1) 0%,rgba(31,39,104,1) 68%) 1;
@@ -162,6 +194,7 @@ body {
     margin-right: 15px;
     flex-shrink: 0;
     cursor: pointer;
+    display:flex;
 }
 .task-button{
     border-radius: 100%;
@@ -174,7 +207,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: transparent;
 }
+.checky-mark{
+    display: none;
+}
+/* .task-button:hover{
+    border-color: #6832a4;
+    border-width: 2px;
+} */
 .task-button-color{
     background: linear-gradient(135deg,rgba(168,108,240,1) 0%,rgba(115,126,215,0.9556197478991597) 68%);
 }
@@ -200,6 +241,7 @@ body {
     flex-shrink: 0;
     margin-top: -20px;
     background-color: var(--VeryLightGrayishBlue);
+    /*background-color: var(--VeryDarkGrayishBlue);/* Dark Mode */
     border-radius:0px 0px 5px 5px ;
 }
 #items-left{
@@ -236,10 +278,23 @@ body {
 .container{
     
 }
+.dark-mode{
+    background-color: var(--VeryDarkGrayishBlue);/* Dark Mode */
+    color: var(--VeryLightGray);
+    -webkit-text-fill-color: var(--VeryLightGray);
+    font-weight: lighter;
+}
 
+.created-task-dark-mode{
+    background-color: var(--VeryDarkGrayishBlue);/* Dark Mode */
+    color: var(--VeryLightGray);
+    font-weight: lighter;
+}
 
-
-
+.tasks-status-dark{
+    background-color: var(--VeryDarkGrayishBlue);
+    color: var(--VeryLightGrayishBlue);
+}
 
 /* DarkMode Section end*/
 /*Events section start*/
@@ -267,5 +322,12 @@ body {
     .footer p{
         font-size: 14px !important;
     }
+    .cross-mark{
+        display:flex !important;
+    }
+    .checky-mark{
+        display: flex;
+    }
+    
 }
 /*Events section end*/
