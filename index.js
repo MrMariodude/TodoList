@@ -41,6 +41,11 @@ function Mode_change(){
     document.querySelectorAll(".created-task").forEach(function(el){
         el.classList.toggle("tasks-status-dark");
         el.classList.toggle("created-task-dark-mode");
+        /* new part*/
+        if(el.firstElementChild.classList.contains("task-button-color")){
+            el.firstElementChild.firstElementChild.classList.toggle("checky-mark");
+        }
+        /* new part*/
     });
     document.querySelector(".check-mark").classList.toggle("dark-mode");
     
@@ -155,6 +160,16 @@ function addNewElement(inputTask_text,flag,ser,btnStatus) {
         }
         return ele;
         });
+        /*new part */
+        if(checkMark.classList.contains("task-button-color") && ActiveBtn.classList.contains("clicked")){
+            checkMark.parentElement.style.display = "none";
+        }
+        else if(CompletedBtn.classList.contains("clicked") && !checkMark.classList.contains("task-button-color")){
+            checkMark.parentElement.style.display = "none";
+        }
+
+
+        /*new part */
         localStorage.setItem("tasks",JSON.stringify(temp));
         /* Store Data in LocalStorage start */
         
