@@ -41,18 +41,20 @@ function Mode_change(){
     document.querySelectorAll(".created-task").forEach(function(el){
         el.classList.toggle("tasks-status-dark");
         el.classList.toggle("created-task-dark-mode");
-        /* new part*/
-        if(el.firstElementChild.classList.contains("task-button-color")){
-            el.firstElementChild.firstElementChild.classList.toggle("checky-mark");
-        }
-        /* new part*/
     });
     document.querySelector(".check-mark").classList.toggle("dark-mode");
-    
-    if(isMoon){
-        body.style.backgroundImage = "url('images/bg-desktop-light.jpg')";
+    if(window.matchMedia('(max-width: 700px)').matches){
+        if(isMoon){
+            body.style.backgroundImage = "url('images/bg-mobile-light.jpg')";
+        }else{
+            body.style.backgroundImage = "url('images/bg-mobile-dark.jpg')";
+        }
     }else{
-        body.style.backgroundImage = "url('images/bg-desktop-dark.jpg')";
+        if(isMoon){
+            body.style.backgroundImage = "url('images/bg-desktop-light.jpg')";
+        }else{
+            body.style.backgroundImage = "url('images/bg-desktop-dark.jpg')";
+        }
     }
 }
 
@@ -72,11 +74,13 @@ if(localStorage.getItem("tasks")){
 
 }
 
+
 if(localStorage.getItem("isMoon")){
     if(localStorage.getItem("isMoon") == "true"){
     btnMode.innerHTML = iconMoon;
     isMoon = true;
     Mode_change();
+    
     body.style.backgroundImage = "url('images/bg-desktop-dark.jpg')";
 }else{
     btnMode.innerHTML = iconSun;
@@ -144,6 +148,7 @@ function addNewElement(inputTask_text,flag,ser,btnStatus) {
     if(btnStatus === "Completed"){
         checkMark.nextElementSibling.classList.add("text-decorate");
         checkMark.classList.add("task-button-color");
+        checkyCompleted.classList.remove("checky-mark");
     }
     checkMark.addEventListener("click", () => { 
         checkMark.nextElementSibling.classList.toggle("text-decorate");
@@ -167,12 +172,9 @@ function addNewElement(inputTask_text,flag,ser,btnStatus) {
         else if(CompletedBtn.classList.contains("clicked") && !checkMark.classList.contains("task-button-color")){
             checkMark.parentElement.style.display = "none";
         }
-
-
         /*new part */
         localStorage.setItem("tasks",JSON.stringify(temp));
         /* Store Data in LocalStorage start */
-        
         checkyCompleted.classList.toggle("checky-mark");
 
 
@@ -180,7 +182,11 @@ function addNewElement(inputTask_text,flag,ser,btnStatus) {
         temp.push([inputTask_text,btnStatus,createdDiv.getAttribute("serial")]);
         localStorage.setItem("tasks",JSON.stringify(temp));
 
-    if(window.matchMedia('(max-width: 700px)'))
+    if(window.matchMedia('(max-width: 700px)').matches)
+    {
+        deleteMark.style.display = "flex";
+    }
+    else
     {
         deleteMark.style.display = "none";
         createdDiv.onmouseenter = function(){
@@ -189,10 +195,6 @@ function addNewElement(inputTask_text,flag,ser,btnStatus) {
         createdDiv.onmouseleave = function(){
             deleteMark.style.display = "none";
         }
-    }
-    else
-    {
-        deleteMark.style.display = "flex";
     }
 
 }
@@ -203,7 +205,19 @@ function addNewElement(inputTask_text,flag,ser,btnStatus) {
 
 
 
-
+window.addEventListener("resize", ()=>{
+    if(window.innerWidth <= 700){
+        if(isMoon)
+        body.style.backgroundImage = "url('images/bg-mobile-dark.jpg')";
+        else
+        body.style.backgroundImage = "url('images/bg-mobile-light.jpg')";
+    }else{
+        if(isMoon)
+        body.style.backgroundImage = "url('images/bg-desktop-dark.jpg')";
+        else
+        body.style.backgroundImage = "url('images/bg-desktop-light.jpg')";
+    }
+});
 
 
 
